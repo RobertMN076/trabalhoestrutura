@@ -10,6 +10,11 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+
+
+// O coração do nosso sistema é uma HashTable. 
+// Ela funciona como um arquivo onde cada pasta tem uma etiqueta única (uma "chave"). 
+// Isso torna a busca e o acesso aos dados extremamente rápidos.
 var HashTable = (function () {
     function HashTable() {
         this.storage = {};
@@ -69,6 +74,8 @@ var HashTable = (function () {
     return HashTable;
 }());
 
+
+// O TaskManager é a classe que utiliza nossa HashTable para executar as ações principais: adicionar, remover e listar tarefas.
 var TaskManager =  (function () {
     function TaskManager(storageKey) {
         if (storageKey === void 0) { storageKey = 'myTasksWithHashTable'; }
@@ -101,6 +108,7 @@ var TaskManager =  (function () {
         return deleted;
     };
 
+    // Para que as tarefas não desapareçam quando o usuário fecha ou recarrega a página, nós as salvamos diretamente no navegador usando o localStorage.
     TaskManager.prototype.saveToLocalStorage = function () {
         try {
 
@@ -178,6 +186,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskListUl = document.getElementById('task-list');
 
 
+
+    // Finalmente, precisa mostrar as tarefas na tela e permitir que o usuário interaja com elas. Fazemos isso manipulando o HTML diretamente com JavaScript.
     function renderTasks() {
 
         taskListUl.innerHTML = '';
