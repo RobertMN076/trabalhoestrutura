@@ -40,20 +40,20 @@
                 <h2 class="head">Minhas Tarefas</h2>
                 <br>
                 <ul id="task-list" class="head size">
-                    <!-- As tarefas serão inseridas aqui pelo JavaScript -->
+
                 </ul>
             </div>
         </div>
     </div>
 
 
-    <!-- 1. Incluindo o seu script do gerenciador de tarefas -->
+
     <script src="task-manager.js"></script>
 
-    <!-- 2. Script para conectar a interface com o gerenciador -->
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Instancia o gerenciador de tarefas que carrega os dados do localStorage
+
             const taskManager = new TaskManager();
 
             const taskForm = document.getElementById('task-form');
@@ -61,9 +61,9 @@
             const datetimeInput = document.getElementById('datetime');
             const taskListUl = document.getElementById('task-list');
 
-            // Função para renderizar as tarefas na tela
+
             function renderTasks() {
-                // Limpa a lista atual para evitar duplicatas
+
                 taskListUl.innerHTML = '';
 
                 const tasks = taskManager.listAllTasks();
@@ -77,13 +77,13 @@
                     const li = document.createElement('li');
                     li.textContent = `${task.description} - ${task.dateTime.toLocaleString('pt-BR')}`;
 
-                    // Adiciona uma quebra de linha para o botão ir para a linha de baixo
+
                     li.appendChild(document.createElement('br'));
 
                     const deleteButton = document.createElement('button');
                     deleteButton.textContent = 'Excluir';
-                    deleteButton.setAttribute('data-task-id', task.id); // Armazena o ID no botão
-                    deleteButton.className = 'delete-button'; // Adicionando uma classe para o estilo
+                    deleteButton.setAttribute('data-task-id', task.id); 
+                    deleteButton.className = 'delete-button'; 
 
                     li.appendChild(deleteButton);
                     taskListUl.appendChild(li);
@@ -92,28 +92,28 @@
 
             // Evento para adicionar uma nova tarefa
             taskForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Impede o recarregamento da página
+                event.preventDefault(); 
 
                 const description = descriptionInput.value;
                 const dateTime = new Date(datetimeInput.value);
 
                 if (description && !isNaN(dateTime.getTime())) {
                     taskManager.addTask(description, dateTime);
-                    renderTasks(); // Atualiza a lista na tela
-                    taskForm.reset(); // Limpa o formulário
+                    renderTasks(); 
+                    taskForm.reset(); 
                 }
             });
 
-            // Evento para excluir uma tarefa (usando delegação de eventos)
+            
             taskListUl.addEventListener('click', function (event) {
                 if (event.target && event.target.nodeName === 'BUTTON') {
                     const taskId = event.target.getAttribute('data-task-id');
                     taskManager.deleteTask(taskId);
-                    renderTasks(); // Atualiza a lista na tela
+                    renderTasks(); 
                 }
             });
 
-            // Renderiza as tarefas iniciais ao carregar a página
+            
             renderTasks();
         });
     </script>
