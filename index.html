@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Tarefas Simples</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Londrina+Outline&family=Londrina+Shadow&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar bg-dark">
+        <div class="container-fluid justify-content-center">
+            <span class="text-light mb-0 h3 head">Task Manager</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card bg-body-tertiary">
+            <div class="card-header bg-dark">
+                <h1 class="head text-light">Gerenciador de Tarefas</h1>
+            </div>
+            <div class="card-body">
+                <form id="task-form" class="head size">
+                    <label for="description">Descrição da Tarefa:</label>
+                    <input type="text" id="description" placeholder="Ex: Estudar JavaScript" required>
+                    <br>
+                    <br>
+                    <label for="datetime">Data e Hora:</label>
+                    <input type="datetime-local" id="datetime" required>
+                
+                    <button type="submit" class="accept">Adicionar Tarefa</button>
+                </form>
+                <br>
+                <h2 class="head">Minhas Tarefas</h2>
+                <br>
+                <ul id="task-list" class="head size">
+                    <!-- As tarefas serão inseridas aqui pelo JavaScript -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 1. Incluindo o seu script do gerenciador de tarefas -->
+    <script src="task-manager.js"></script>
+
+    <!-- 2. Script para conectar a interface com o gerenciador -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Instancia o gerenciador de tarefas que carrega os dados do localStorage
+            const taskManager = new TaskManager();
+
+            const taskForm = document.getElementById('task-form');
+            const descriptionInput = document.getElementById('description');
+            const datetimeInput = document.getElementById('datetime');
+            const taskListUl = document.getElementById('task-list');
+
+            // Função para renderizar as tarefas na tela
+            function renderTasks() {
+                // Limpa a lista atual para evitar duplicatas
+                taskListUl.innerHTML = '';
+
+                const tasks = taskManager.listAllTasks();
+
+                if (tasks.length === 0) {
+                    taskListUl.innerHTML = '<li class="head size">Nenhuma tarefa cadastrada.</li>';
+                    return;
+                }
+
+                tasks.forEach(function (task) {
+                    const li = document.createElement('li');
+                    li.textContent = `${task.description} - ${task.dateTime.toLocaleString('pt-BR')}`;
+
+                    // Adiciona uma quebra de linha para o botão ir para a linha de baixo
+                    li.appendChild(document.createElement('br'));
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Excluir';
+                    deleteButton.setAttribute('data-task-id', task.id); // Armazena o ID no botão
+                    deleteButton.className = 'delete-button'; // Adicionando uma classe para o estilo
+
+                    li.appendChild(deleteButton);
+                    taskListUl.appendChild(li);
+                });
+            }
+
+            // Evento para adicionar uma nova tarefa
+            taskForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Impede o recarregamento da página
+
+                const description = descriptionInput.value;
+                const dateTime = new Date(datetimeInput.value);
+
+                if (description && !isNaN(dateTime.getTime())) {
+                    taskManager.addTask(description, dateTime);
+                    renderTasks(); // Atualiza a lista na tela
+                    taskForm.reset(); // Limpa o formulário
+                }
+            });
+
+            // Evento para excluir uma tarefa (usando delegação de eventos)
+            taskListUl.addEventListener('click', function (event) {
+                if (event.target && event.target.nodeName === 'BUTTON') {
+                    const taskId = event.target.getAttribute('data-task-id');
+                    taskManager.deleteTask(taskId);
+                    renderTasks(); // Atualiza a lista na tela
+                }
+            });
+
+            // Renderiza as tarefas iniciais ao carregar a página
+            renderTasks();
+        });
+    </script>
+
+</body>
+
+</html>

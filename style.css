@@ -1,0 +1,22 @@
+.head{
+    font-family: "Dancing Script", sans-serif;
+}
+
+.card{
+    margin-top: 150px;
+    border-radius: 10px;
+    border-color: transparent;
+}
+
+.size{
+    font-size: 25px;
+}
+
+.delete-button {
+    margin-top: 8px; /* Adiciona um espaço acima do botão */
+    margin-bottom: 15px; /* Adiciona um espaço abaixo, separando da próxima tarefa */
+}
+
+.accept{
+    margin-left: 10px;
+}
